@@ -46,8 +46,8 @@ bot.on("message", async (msg) => {
     
     try {
         const response = await fetch(url, options);
-        const result = await response.text();
-        bot.sendMessage(chatId, result);
+        const result = await response.text(); 
+        bot.sendMessage(chatId,result);
     } catch (error) {
         console.error(error);
     }
