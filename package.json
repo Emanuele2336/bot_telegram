@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/Emanuele2336/bot_telegram#readme",
   "dependencies": {
+    "node-fetch": "^2.7.0",
     "node-telegram-bot-api": "^0.66.0"
   },
   "description": ""
