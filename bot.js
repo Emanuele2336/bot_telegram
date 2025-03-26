@@ -20,7 +20,6 @@ try {
 
 import fs from 'fs';//perchè da problemi di compatibilità il require su  es6
 import TelegramBot from 'node-telegram-bot-api';
-const url = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term=bojack&country=uk';
 
 const conf = JSON.parse(fs.readFileSync('conf.json'));
 const token = conf.key;
@@ -36,6 +35,7 @@ bot.on("message", async (msg) => {
    }
 
    if(text !== "/start"){
+    let url=`https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term=`+text+`&country=uk`;
     const options = {
       method: 'GET',
       headers: {
@@ -46,11 +46,56 @@ bot.on("message", async (msg) => {
     
     try {
         const response = await fetch(url, options);
-        const result = await response.text(); 
-        bot.sendMessage(chatId,result);
+        const result = await response.json(); 
+let msg="";
+       //bot.sendMessage(chatId,result);
+       for(let i=0;i<result.results.length;i++){
+msg+="titolo: "+(result.results[i].name)+"\n";
+for(let j=0;j<result.results[i].locations.length;j++){
+    msg+="url: "+(result.results[i].locations[j].url)+"\n";
+}
+
+       }
+       bot.sendMessage(chatId,msg);
     } catch (error) {
         console.error(error);
     }
    }
    
 });
+/*
+function formattazione(r){
+let platform=[];
+let link=[];
+let x=r.results;
+let location=
+for(let i=0; i<4;i++){
+    platform.push(r.results[i].locations[i].display_name)
+    link.push(r.results[i].locations[i].url)
+}
+}
+*/
+/*
+function formatMovieData(data) {
+    let formattedData = [];
+    
+    data.results.slice(0, 4).forEach(movie => {
+        let movieEntry = {
+            nomeFilm: movie.name,
+            link: [],
+            piattaforma: []
+        };
+        
+        if (movie.locations) {
+            movie.locations.forEach(location => {
+                movieEntry.link.push(location.url);
+                movieEntry.piattaforma.push(location.display_name);
+            });
+        }
+        
+        formattedData.push(movieEntry);
+    });
+    
+    return formattedData;
+}
+    */
